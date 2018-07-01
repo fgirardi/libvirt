@@ -3014,16 +3014,10 @@ esxVI_LookupVirtualMachineByName(esxVI_Context *ctx, const char *name,
         break;
     }
 
-    if (!(*virtualMachine)) {
-        if (occurrence == esxVI_Occurrence_OptionalItem) {
-            result = 0;
-
-            goto cleanup;
-        } else {
-            virReportError(VIR_ERR_NO_DOMAIN,
-                           _("Could not find domain with name '%s'"), name);
-            goto cleanup;
-        }
+    if (!(*virtualMachine) && occurrence != esxVI_Occurrence_OptionalItem) {
+        virReportError(VIR_ERR_NO_DOMAIN,
+                       _("Could not find domain with name '%s'"), name);
+        goto cleanup;
     }
 
     result = 0;
