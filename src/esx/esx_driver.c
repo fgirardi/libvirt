@@ -854,12 +854,7 @@ esxConnectOpen(virConnectPtr conn, virConnectAuthPtr auth,
                  conn->uri->path, conn->uri->scheme);
     }
 
-    /* Require server part */
-    if (!conn->uri->server) {
-        virReportError(VIR_ERR_INVALID_ARG, "%s",
-                       _("URI is missing the server part"));
-        return VIR_DRV_OPEN_ERROR;
-    }
+    VIR_DRV_CONN_CHECK_SERVER;
 
     /* Require auth */
     if (!auth || !auth->cb) {
