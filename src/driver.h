@@ -60,6 +60,15 @@ typedef enum {
     ((drv)->connectSupportsFeature ? \
         (drv)->connectSupportsFeature((conn), (feature)) > 0 : 0)
 
+/* Check if the connection of the driver has filled the server address */
+# define VIR_DRV_CONN_CHECK_SERVER \
+    do { \
+        if (!conn->uri->server) { \
+            virReportError(VIR_ERR_INVALID_ARG, "%s", \
+                       _("URI is missing the server part")); \
+            return VIR_DRV_OPEN_ERROR; \
+        } \
+    } while (0)
 
 # define __VIR_DRIVER_H_INCLUDES___
 
