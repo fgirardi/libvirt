@@ -1005,6 +1005,11 @@ virConnectOpenInternal(const char *name,
             continue;
         }
 
+        if (virConnectDriverTab[i]->remoteOnly && ret->uri && !ret->uri->server) {
+            virReportError(VIR_ERR_INVALID_ARG, "%s", _("URI is missing the server part"));
+            goto failed;
+        }
+
         /* Filter drivers based on declared URI schemes */
         if (virConnectDriverTab[i]->uriSchemes) {
             bool matchScheme = false;
